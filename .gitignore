@@ -11,3 +11,6 @@ coverage/
 report.xml
 # macOS
 .DS_Store
+# Next.js 자동 생성
+next-env.d.ts
+*.tsbuildinfo
