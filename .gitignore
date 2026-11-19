@@ -1,0 +1,13 @@
+# 의존성과 빌드 결과
+node_modules/
+.next/
+out/
+coverage/
+# 비밀값
+.env
+.env.*
+!.env.example
+# 테스트 결과
+report.xml
+# macOS
+.DS_Store
