@@ -1,0 +1,19 @@
+{
+  "name": "analyzer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CI 실패 로그를 분석해 댓글 글을 만드는 명령줄 도구 (서버 없이 워크플로에서 실행)",
+  "scripts": {
+    "cli": "tsx src/cli.ts",
+    "test": "node --import tsx --test src/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.12.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

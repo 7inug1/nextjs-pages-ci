@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: { alias: { "@": fileURLToPath(new URL("./", import.meta.url)) } },
   test: {
+    exclude: ["**/node_modules/**", "analyzer/**"], // analyzer는 자기 테스트(node:test)를 따로 돌린다
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
     // 실패 분석 워크플로가 읽는 결과 파일(report.xml)을 만든다

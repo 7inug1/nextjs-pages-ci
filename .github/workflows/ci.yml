@@ -19,3 +19,6 @@ jobs:                         # 무슨 일을 할까
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - run: npm ci --prefix analyzer          # 분석 도구는 따로 설치한다
+      - run: npm run typecheck --prefix analyzer
+      - run: npm test --prefix analyzer
