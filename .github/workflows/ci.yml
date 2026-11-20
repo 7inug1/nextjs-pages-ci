@@ -1,37 +1,21 @@
-name: CI
+name: CI                      # Actions 탭에 보이는 워크플로 이름
 
-on:
-  pull_request:            # PR을 올리거나 커밋을 더 올릴 때
+on:                           # 언제 돌까
   push:
-    branches: [main]       # main에 합쳐진 뒤에도 한 번 더
+    branches: [main]          # main에 합쳐졌을 때
+  pull_request:               # PR을 올리거나 커밋을 더 올렸을 때
 
-permissions:
-  contents: read           # 코드를 읽기만 한다
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true # 새 커밋이 오면 이전 검사는 취소한다
-
-jobs:
-  verify:
-    name: 린트, 타입 검사, 테스트, 빌드
-    runs-on: ubuntu-latest
-    timeout-minutes: 10    # 무한 대기를 막는다
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+jobs:                         # 무슨 일을 할까
+  verify:                     # 잡 이름 (id)
+    runs-on: ubuntu-latest    # 어디서: GitHub이 빌려주는 서버
+    steps:                    # 위에서 아래로 순서대로
+      - uses: actions/checkout@v4     # 저장소 코드를 서버로 내려받는다
+      - uses: actions/setup-node@v4   # Node.js를 설치한다
         with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run lint          # 가장 빨리 깨지는 것부터
+          node-version-file: .nvmrc   # 버전은 .nvmrc에서 읽는다
+          cache: npm                  # 설치한 패키지를 저장해 다음에 빠르게
+      - run: npm ci                   # package-lock.json 그대로 설치
+      - run: npm run lint
       - run: npm run typecheck
-      - run: npm test              # 결과 파일 report.xml도 만든다
+      - run: npm test
       - run: npm run build
-      - name: 테스트 결과 파일 남기기
-        if: always()               # 실패해도 남긴다 (분석 워크플로가 읽는다)
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-report
-          path: report.xml
-          if-no-files-found: ignore
