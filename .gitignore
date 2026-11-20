@@ -14,3 +14,8 @@ report.xml
 # Next.js 자동 생성
 next-env.d.ts
 *.tsbuildinfo
+# 분석 도구 작업 파일
+log.txt
+diff.txt
+comment.md
+title.txt

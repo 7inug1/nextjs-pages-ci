@@ -42,3 +42,12 @@
 - AI가 틀릴 뻔한 곳: 공식 starter workflow는 `static_site_generator: next`로 `basePath`를 자동 주입하지만, `configure-pages`는 설정 파일을 `.js`, `.cjs`, `.mjs`만 인식한다(소스의 `SUPPORTED_FILE_EXTENSIONS` 확인). 우리는 `next.config.ts`라서 그대로 쓰면 맞지 않는다. 그래서 `configure-pages`의 `base_path` 출력값을 환경 변수(`NEXT_PUBLIC_BASE_PATH`)로 넘기고 `next.config.ts`가 읽도록 했다.
 - 액션 버전은 릴리스 조회 기준: checkout v7, setup-node v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5.
 - 아직 안 한 것: 실제 배포 실행과 주소 확인(합친 뒤에 한다). 배포 워크플로는 main push에서만 돌아서 PR 단계에서는 실행되지 않는다.
+
+## 단계 5-1. 분석 도구 가져오기 (PR 5)
+
+- 목표: 이전 프로젝트(`ci-failure-analyzer`)의 분석 도구를 서버 없이 명령줄로 쓸 수 있게 `analyzer/`에 둔다.
+- 완료 조건: 가져온 테스트 32개 통과, 새로 쓴 `analyze` 함수 테스트 통과, 키 없이 실행하면 실패 안내 글이 나온다, 루트의 lint, typecheck, test, build는 그대로 통과.
+- 확인 방법: 테스트를 먼저 쓰고 실패(모듈 없음)를 확인한 뒤 구현. 명령줄로 `fingerprint`와 `analyze`를 직접 실행.
+- 설계: 이전에는 로컬 서버(`/fingerprint`, `/analyze`)였지만 공개 저장소라 내 맥 서버를 쓸 수 없다. 같은 로직을 `analyze()` 함수와 명령줄(`cli.ts`)로 옮겼고 서버(express, multer)는 뺐다.
+- AI가 틀린 곳: 명령줄 파일에 최상위 `await`를 써서 실행 오류가 났다(CommonJS 형식). `main()` 함수로 감싸 고쳤다.
+- 아직 안 한 것: 실제 AI 호출(키 필요), 분석 워크플로(`ci-failure-analyzer.yml`), 일부러 실패시킨 PR에서 댓글 확인.
