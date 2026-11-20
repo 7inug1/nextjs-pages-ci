@@ -32,3 +32,13 @@
 - 확인 방법: 빌드, `out/` 폴더를 `python3 -m http.server`로 열어 제목 확인, lint와 test 재실행.
 - AI가 한 일과 확인: 생성된 설정에 있던 `cacheComponents`, `partialPrefetching`을 확인 없이 지웠다. 되돌려 빌드해 보니 `PPR cannot be enabled in export mode` 오류가 나서, 정적 내보내기와 함께 쓸 수 없어 제거한 것이 맞았다.
 - 아직 안 한 것: GitHub Pages의 프로젝트 주소(`/nextjs-pages-ci/`)에서 경로가 맞는지는 4단계에서 `configure-pages`가 설정하는 `basePath`로 확인한다.
+
+## 단계 4. 배포 워크플로 (PR 4)
+
+- 목표: main에 합치면 GitHub Pages에 자동 배포되고 주소가 열린다.
+- 완료 조건: build와 deploy 두 잡이 순서대로 초록, `https://7inug1.github.io/nextjs-pages-ci/`에서 첫 화면과 스타일이 보인다.
+- 확인 방법: main 합친 뒤 Actions 화면, 배포 주소 열기.
+- 설정: 저장소 Pages 배포 방식을 `gh api`로 GitHub Actions(`build_type=workflow`)로 켰다.
+- AI가 틀릴 뻔한 곳: 공식 starter workflow는 `static_site_generator: next`로 `basePath`를 자동 주입하지만, `configure-pages`는 설정 파일을 `.js`, `.cjs`, `.mjs`만 인식한다(소스의 `SUPPORTED_FILE_EXTENSIONS` 확인). 우리는 `next.config.ts`라서 그대로 쓰면 맞지 않는다. 그래서 `configure-pages`의 `base_path` 출력값을 환경 변수(`NEXT_PUBLIC_BASE_PATH`)로 넘기고 `next.config.ts`가 읽도록 했다.
+- 액션 버전은 릴리스 조회 기준: checkout v7, setup-node v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5.
+- 아직 안 한 것: 실제 배포 실행과 주소 확인(합친 뒤에 한다). 배포 워크플로는 main push에서만 돌아서 PR 단계에서는 실행되지 않는다.
