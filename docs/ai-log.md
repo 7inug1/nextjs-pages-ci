@@ -20,5 +20,7 @@
 ## 단계 2. CI 워크플로 (PR 2)
 
 - 목표: PR을 올리면 GitHub 서버에서 린트, 타입 검사, 테스트, 빌드가 자동으로 돈다.
-- 완료 조건: PR의 Checks에 초록 체크, 일부러 린트 오류를 넣으면 린트 단계만 실패하고 뒤 단계는 건너뜀, 실패해도 `test-report` 아티팩트가 남는다.
-- 확인 방법: PR Checks 화면과 `gh run view`.
+- 완료 조건: PR의 Checks에 초록 체크.
+- 확인 방법: PR Checks 화면과 `gh pr checks`.
+- 경과: 처음에는 `permissions`, `concurrency`, `timeout-minutes`, 아티팩트 업로드까지 넣은 완성본을 썼다가, 이유를 이해하기 어려워 공식 Node.js 예시 구조의 가장 기본 버전으로 줄였다. 뺀 항목은 이해하며 하나씩 다시 더한다.
+- AI가 틀린 곳: 공식 starter workflow의 `@v4`를 그대로 따랐지만 최신은 `checkout` v7, `setup-node` v7이었다. 릴리스를 조회해 v7로 올리고 CI 통과를 확인했다. `ubuntu-latest`를 "재현성이 중요하지 않아 괜찮다"고 설명한 것도 부정확했고, 정확히는 편의와 재현성 사이의 트레이드오프다.
