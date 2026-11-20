@@ -24,3 +24,11 @@
 - 확인 방법: PR Checks 화면과 `gh pr checks`.
 - 경과: 처음에는 `permissions`, `concurrency`, `timeout-minutes`, 아티팩트 업로드까지 넣은 완성본을 썼다가, 이유를 이해하기 어려워 공식 Node.js 예시 구조의 가장 기본 버전으로 줄였다. 뺀 항목은 이해하며 하나씩 다시 더한다.
 - AI가 틀린 곳: 공식 starter workflow의 `@v4`를 그대로 따랐지만 최신은 `checkout` v7, `setup-node` v7이었다. 릴리스를 조회해 v7로 올리고 CI 통과를 확인했다. `ubuntu-latest`를 "재현성이 중요하지 않아 괜찮다"고 설명한 것도 부정확했고, 정확히는 편의와 재현성 사이의 트레이드오프다.
+
+## 단계 3. 정적 내보내기 (PR 3)
+
+- 목표: 서버 없이 파일로 내보내 GitHub Pages에 올릴 수 있게 한다.
+- 완료 조건: `npm run build` 뒤 `out/index.html`이 생기고, 로컬 정적 서버로 열면 첫 화면이 보인다.
+- 확인 방법: 빌드, `out/` 폴더를 `python3 -m http.server`로 열어 제목 확인, lint와 test 재실행.
+- AI가 한 일과 확인: 생성된 설정에 있던 `cacheComponents`, `partialPrefetching`을 확인 없이 지웠다. 되돌려 빌드해 보니 `PPR cannot be enabled in export mode` 오류가 나서, 정적 내보내기와 함께 쓸 수 없어 제거한 것이 맞았다.
+- 아직 안 한 것: GitHub Pages의 프로젝트 주소(`/nextjs-pages-ci/`)에서 경로가 맞는지는 4단계에서 `configure-pages`가 설정하는 `basePath`로 확인한다.
