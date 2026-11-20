@@ -9,8 +9,8 @@ jobs:                         # 무슨 일을 할까
   verify:                     # 잡 이름 (id)
     runs-on: ubuntu-latest    # 어디서: GitHub이 빌려주는 서버
     steps:                    # 위에서 아래로 순서대로
-      - uses: actions/checkout@v4     # 저장소 코드를 서버로 내려받는다
-      - uses: actions/setup-node@v4   # Node.js를 설치한다
+      - uses: actions/checkout@v7     # 저장소 코드를 서버로 내려받는다
+      - uses: actions/setup-node@v7   # Node.js를 설치한다
         with:
           node-version-file: .nvmrc   # 버전은 .nvmrc에서 읽는다
           cache: npm                  # 설치한 패키지를 저장해 다음에 빠르게
