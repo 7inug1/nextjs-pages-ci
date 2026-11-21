@@ -6,7 +6,7 @@ describe("첫 화면", () => {
   it("제목과 설명을 보여 준다", () => {
     render(<Home />);
     expect(
-      screen.getByRole("heading", { level: 1, name: "nextjs-pages-ci" }),
+      screen.getByRole("heading", { level: 1, name: "일부러 틀린 제목" }),
     ).toBeInTheDocument();
     expect(
       screen.getByText("GitHub Actions로 검사하고 GitHub Pages에 배포하는 Next.js 서비스"),
