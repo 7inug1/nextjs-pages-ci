@@ -22,3 +22,10 @@ jobs:                         # 무슨 일을 할까
       - run: npm ci --prefix analyzer          # 분석 도구는 따로 설치한다
       - run: npm run typecheck --prefix analyzer
       - run: npm test --prefix analyzer
+      - name: 테스트 결과 파일 남기기
+        if: always()                       # 실패해도 남긴다 (분석 워크플로가 읽는다)
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-report
+          path: report.xml
+          if-no-files-found: ignore        # 빌드 단계에서 실패해 파일이 없어도 오류로 치지 않는다

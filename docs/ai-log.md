@@ -51,3 +51,12 @@
 - 설계: 이전에는 로컬 서버(`/fingerprint`, `/analyze`)였지만 공개 저장소라 내 맥 서버를 쓸 수 없다. 같은 로직을 `analyze()` 함수와 명령줄(`cli.ts`)로 옮겼고 서버(express, multer)는 뺐다.
 - AI가 틀린 곳: 명령줄 파일에 최상위 `await`를 써서 실행 오류가 났다(CommonJS 형식). `main()` 함수로 감싸 고쳤다.
 - 아직 안 한 것: 실제 AI 호출(키 필요), 분석 워크플로(`ci-failure-analyzer.yml`), 일부러 실패시킨 PR에서 댓글 확인.
+
+## 단계 5-2. 분석 워크플로 (PR 6)
+
+- 목표: CI가 실패하면 GitHub 서버에서 AI가 원인을 분석해 PR이면 댓글, main이면 이슈로 남긴다.
+- 완료 조건: 일부러 테스트를 깨뜨린 PR에 "CI 실패 분석" 댓글이 달린다. (`workflow_run` 워크플로는 main에 있어야 동작해서 합친 뒤에 확인한다.)
+- 이전 파일(`ci-failure-analyzer.yml`)에서 바꾼 것: 내 맥 러너 대신 `ubuntu-latest`, 서버 호출(`curl`) 대신 명령줄(`fingerprint`, `analyze`), 분석 도구는 main의 것만 받음, 같은 저장소의 PR만 분석(fork PR 제외).
+- `ci.yml`에 테스트 결과 파일(`report.xml`) 업로드를 되살렸다. 분석이 이 파일을 읽는다.
+- 확인한 것: YAML 문법, 키 없이 명령줄 실행(실패 안내 글 생성).
+- 아직 안 한 것: 실제 AI 호출과 PR 댓글(키는 등록 완료). 합친 뒤 실패 PR로 확인한다.
