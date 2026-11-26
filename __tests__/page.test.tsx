@@ -9,7 +9,7 @@ describe("첫 화면", () => {
       screen.getByRole("heading", { level: 1, name: "nextjs-pages-ci" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("GitHub Actions로 검사하고 GitHub Pages에 배포하는 Next.js 서비스"),
+      screen.getByText("GitHub Actions로 검사하고 AWS EC2에 배포하는 Next.js 서비스"),
     ).toBeInTheDocument();
   });
 });
