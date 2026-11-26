@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "nextjs-pages-ci",
-  description: "GitHub Actions로 검사하고 GitHub Pages에 배포하는 Next.js 서비스",
+  description: "GitHub Actions로 검사하고 AWS EC2에 배포하는 Next.js 서비스",
 };
 
 export default function RootLayout({

@@ -60,3 +60,13 @@
 - `ci.yml`에 테스트 결과 파일(`report.xml`) 업로드를 되살렸다. 분석이 이 파일을 읽는다.
 - 확인한 것: YAML 문법, 키 없이 명령줄 실행(실패 안내 글 생성).
 - 아직 안 한 것: 실제 AI 호출과 PR 댓글(키는 등록 완료). 합친 뒤 실패 PR로 확인한다.
+
+## 단계 7. 서버 렌더링 전환 (PR 9)
+
+- 목표: TTFB 과제를 위해 요청마다 서버가 페이지를 그리게 한다.
+- 이유: 정적 내보내기는 빌드할 때 HTML을 미리 다 만들어서, 페이지의 fetch가 빌드 때 한 번만 돈다. 그러면 외부 자원 지연을 늘려도 TTFB가 변하지 않아 과제의 측정이 성립하지 않는다.
+- 바꾼 것: `next.config.ts`에서 `output: "export"`, `images.unoptimized`, `basePath` 제거. GitHub Pages는 서버 코드를 못 돌려서 `deploy.yml`(Pages 배포) 삭제. 첫 화면과 메타 설명 문구를 EC2 기준으로.
+- 완료 조건: lint, typecheck, test, build 통과, 빌드 로그에 `out/` 대신 `.next/`, `next start`로 띄운 첫 화면 200.
+- 확인 방법: 문구 테스트를 먼저 바꿔 실패 확인 후 구현. 로컬에서 `next build` 후 `next start`, curl로 확인.
+- 아직 안 한 것: EC2 서버를 `next start` 상시 실행과 nginx 리버스 프록시로 바꾸기, GitHub 저장소 설정의 Pages 사이트 내리기(지금은 마지막 배포본이 남아 있음).
+
