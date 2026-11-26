@@ -70,3 +70,11 @@
 - 확인 방법: 문구 테스트를 먼저 바꿔 실패 확인 후 구현. 로컬에서 `next build` 후 `next start`, curl로 확인.
 - 아직 안 한 것: EC2 서버를 `next start` 상시 실행과 nginx 리버스 프록시로 바꾸기, GitHub 저장소 설정의 Pages 사이트 내리기(지금은 마지막 배포본이 남아 있음).
 
+
+## 단계 8. TTFB 실험용 mock 서버 (PR 10)
+
+- 목표: 응답 시간을 원하는 만큼 늦출 수 있는 가짜 외부 자원을 만든다.
+- 설계: `mock/server.mjs`, Node 기본 `http`만 사용(설치 없음). `GET /data?delay=500&name=a`면 500ms 뒤 `{ name, delay }`. `cache-control: no-store`. `npm run mock`으로 4000번 포트(`MOCK_PORT`로 변경 가능).
+- 이유: 실제 HTTP 왕복이 일어나 외부 API 호출과 비슷하고, 지연을 만드는 쪽이 Next.js 서버(측정 대상) 밖에 있어 측정값에 섞이지 않는다. 같은 앱의 Route Handler를 다시 부르는 방식은 피했다.
+- 완료 조건: 테스트 4개(지연, 지연 없음, 잘못된 delay는 400, 다른 주소는 404) 통과, 직접 실행해 500ms 지연 확인.
+- 확인 방법: 테스트를 먼저 쓰고 실패(모듈 없음)를 확인한 뒤 구현. `npm run mock` 후 curl로 TTFB 약 0.51초 확인.
